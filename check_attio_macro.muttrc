@@ -1,0 +1,9 @@
+# Macro to check companies in Attio from email content
+# Add this to your main muttrc file with: source ~/.mutt/check_attio_macro.muttrc
+
+# Pipe current message to check_urls_in_attio_neomutt.py
+# Usage: Press ,a while viewing an email
+macro index,pager ,a "<pipe-message>python3 ~/.mutt/check_urls_in_attio_neomutt.py<enter>" "Check companies in Attio"
+
+# Alternative macro that saves output to a file for later reference
+macro index,pager ,A "<pipe-message>python3 ~/.mutt/check_urls_in_attio_neomutt.py > ~/tmp/attio_check_$(date +%Y%m%d_%H%M%S).txt<enter>" "Check companies in Attio (save to file)" 

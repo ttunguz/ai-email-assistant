@@ -1,0 +1,49 @@
+# HTML rendering options - enhanced setup
+
+# For auto-view in pager (text rendering)
+text/html; ~/.mutt/process_html.sh %s; copiousoutput; needsterminal
+
+# For viewing HTML attachments directly (browser)
+text/html; open -a Safari %s; nametemplate=%s.html; description=HTML document
+
+# For viewing HTML in terminal with better formatting
+text/html; lynx -dump -nolist -width=80 %s; copiousoutput; needsterminal
+
+# Fallback HTML viewing options
+text/html; w3m -dump -T text/html -cols 80 %s; copiousoutput; needsterminal
+text/html; textutil -convert txt -stdout %s; copiousoutput; needsterminal
+
+# For auto-view in pager (text rendering)
+text/html; textutil -convert txt -stdout %s; copiousoutput
+
+# For viewing HTML attachments directly (browser)
+text/*;                     view
+
+application/pdf; open -a Preview '%s'; copiousoutput;
+application/msword; open -a TextEdit '%s'; copiousoutput;
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; open -a TextEdit '%s'; copiousoutput;
+application/vnd.msword; open -a TextEdit '%s'; copiousoutput;
+application/vnd.ms-excel; open -a "Microsoft Excel" '%s'; copiousoutput;
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; open -a "Microsoft Excel" '%s'; copiousoutput;
+application/vnd.ms-powerpoint; open -a Keynote '%s'; copiousoutput;
+application/vnd.openxmlformats-officedocument.presentationml.presentation; open -a Keynote '%s'; copiousoutput;
+
+# Image handling options - choose the one that works for your terminal
+# Option 1: Viu for inline image preview in supported terminals
+image/*; viu -t %s && read -n 1
+
+# Option 2: Terminal kitty image protocol (for Kitty terminal users)
+#image/*; kitty +kitten icat --transfer-mode=file --place=%wx%h@%wx%h %s; copiousoutput
+
+# Option 3: Catimg for terminal image viewing (install with brew install catimg)
+#image/*; catimg -w 100 %s; copiousoutput
+
+# Option 4: Open images externally in Preview
+#image/*; open -a Preview '%s'; copiousoutput
+
+# Specific image formats
+image/jpg; ~/.mutt/view_attachment.sh %s jpg; nametemplate=%s.jpg
+image/jpeg; ~/.mutt/view_attachment.sh %s jpg; nametemplate=%s.jpg
+image/png; ~/.mutt/view_attachment.sh %s png; nametemplate=%s.png
+image/gif; ~/.mutt/view_attachment.sh %s gif; nametemplate=%s.gif
+

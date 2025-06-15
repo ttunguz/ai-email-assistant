@@ -1,0 +1,79 @@
+## tender theme for mutt
+# Colors from tender.vim by Jacobo Tabernero
+
+# Basic Colors
+color attachment  color153 color235  # b3deef on background
+color bold        color255 color235  # eeeeee on background
+color error       color203 color235  # f43753 on background
+color hdrdefault  color255 color235  # eeeeee on background
+color indicator   color232 color208  # black text on orange for highlight
+color markers     color203 color235  # f43753 on background
+color normal      color255 color235  # eeeeee on background
+color quoted      color180 color235  # d3b987 on background
+color quoted1     color153 color235  # b3deef on background
+color quoted2     color180 color235  # d3b987 on background
+color quoted3     color153 color235  # b3deef on background
+color quoted4     color180 color235  # d3b987 on background
+color quoted5     color153 color235  # b3deef on background
+color search      color235 color215  # background on ffc24b
+color signature   color153 color235  # b3deef on background
+color status      color235 color153  # background on b3deef
+color tilde       color238 color235  # comment color on background
+color tree        color185 color235  # c9d05c on background
+color underline   color255 color239  # eeeeee on ui gray
+
+# Sidebar
+color sidebar_divider    color153 color235  # b3deef on background
+color sidebar_new        color185 color235  # c9d05c on background
+
+# Message States
+color index color185 color235 ~N  # c9d05c on background (new messages)
+color index color153 color235 ~O  # b3deef on background (old messages)
+color index color153 color235 ~P  # b3deef on background (from me)
+color index color215 color235 ~F  # ffc24b on background (flagged)
+color index color180 color235 ~Q  # d3b987 on background (replied)
+color index color203 color235 ~=  # f43753 on background (duplicates)
+color index color235 color255 ~T  # background on eeeeee (tagged)
+color index color235 color203 ~D  # background on f43753 (deleted)
+
+# Headers
+color header color215 color235 "^(To:|From:)"      # ffc24b
+color header color185 color235 "^Subject:"         # c9d05c
+color header color153 color235 "^X-Spam-Status:"   # b3deef
+color header color153 color235 "^Received:"        # b3deef
+
+# URLs and other patterns
+color body color185 color235 "([-[:alnum:]]+\\.)+([0-9]{1,3}|[-[:alpha:]]+)/[[:graph:]]*"
+
+# Mail addresses
+color body color215 color235 "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+color body color215 color235 "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+
+# Smileys and special characters
+color body color235 color215 "[;:]-*[)>(<lt;|]"       # :) :-) ;) ;-) etc.
+color body color255 color235 "\\*[- A-Za-z]+\\*"      # *text* for bold
+
+# PGP
+color body color215 color235 "^-.*PGP.*-*"
+color body color185 color235 "^gpg: Good signature from"
+color body color203 color235 "^gpg: Can't.*$"
+color body color215 color235 "^gpg: WARNING:.*$"
+color body color203 color235 "^gpg: BAD signature from"
+color body color203 color235 "^gpg: Note: This key has expired!"
+color body color215 color235 "^gpg: There is no indication that the signature belongs to the owner."
+color body color215 color235 "^gpg: can't handle these multiple signatures"
+color body color215 color235 "^gpg: signature verification suppressed"
+color body color215 color235 "^gpg: invalid node with packet of type"
+
+# GPG Related
+color body color185 color235 "^Good signature from:"
+color body color203 color235 "^.?BAD.? signature from:"
+color body color185 color235 "^Verification successful"
+color body color203 color235 "^Verification [^s][^[:space:]]*$"
+
+# Compose screen
+color compose header            color255 color235
+color compose security_encrypt  color180 color235
+color compose security_sign     color153 color235
+color compose security_both     color185 color235
+color compose security_none     color215 color235

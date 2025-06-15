@@ -1,0 +1,70 @@
+# Use msmtp-enqueue.sh as sendmail to handle offline mode
+set sendmail = ~/.mutt/msmtp-enqueue.sh
+set sendmail_wait = -1
+
+# HTML email viewing options
+set mailcap_path = ~/.mutt/mailcap
+
+# Always prefer plain text when available, but render HTML if that's all we have
+alternative_order text/plain text/enriched text/html
+auto_view text/html
+
+# Improved HTML viewing options
+set wait_key = no
+set pipe_decode = yes
+set thorough_search = yes
+set reflow_text = yes
+set reflow_wrap = 78
+set smart_wrap = yes
+set markers = no
+set tilde = yes
+
+# HTML handling key bindings - enhanced options
+macro index,pager H "<view-attachments><search>html<enter><view-mailcap><exit>" "Open HTML email in browser"
+macro index,pager V "<view-attachments><search>html<enter><view-mailcap><exit>" "Open HTML email in browser"
+macro index,pager B "<pipe-message> cat > /tmp/mutt.html && open -a Safari /tmp/mutt.html<enter>" "View HTML in browser"
+macro index,pager T "<pipe-message> ~/.mutt/process_html.sh<enter>" "View as formatted text"
+macro index,pager L "<pipe-message> lynx -dump -nolist -width=80<enter>" "View with lynx"
+macro index,pager W "<pipe-message> w3m -dump -T text/html -cols 80<enter>" "View with w3m"
+
+# URL handling
+macro index,pager \cb "<pipe-message>~/.mutt/extract_urls.sh<enter>" "Extract URLs from message"
+macro index,pager \co "<pipe-entry>open '<enter>" "Open HTML message in browser"
+macro index,pager O ":!/Users/tomasztunguz/.mutt/select_url_modal.py<enter>" "TEST - Just run select_url_modal.py"
+
+# Alias configuration
+set alias_file = ~/.mutt/aliases.txt
+source ~/.mutt/aliases.txt
+
+# Notmuch integration - use notmuch for built-in search
+# set query_command = "notmuch search --output=threads %s"
+set query_command = "notmuch address --sort=newest-first --format=text --output=count --deduplicate=address 'from:*%s* OR to:*%s*' | grep -v 'tt@theory.ventures\\|ttunguz@redpoint.com\\|ttunguz@gmail.com' | sort -rn -k1 | head -20"
+macro index \en "<enter-command>unset wait_key<enter><shell-escape>~/.mutt/notmuch_py.py<enter><change-folder-readonly>~/.cache/mutt_results<enter>" "notmuch: search mail"
+macro index \et "<enter-command>unset wait_key<enter><pipe-message>~/.mutt/notmuch.sh thread<enter><change-folder-readonly>~/.cache/mutt_results<enter><enter-command>set wait_key<enter>" "notmuch: reconstruct thread"
+
+# Gmail-style notmuch navigation shortcuts
+macro index gi "<enter-command>unset wait_key<enter><shell-escape>notmuch search --output=files tag:inbox | head -n 1000 | xargs -I {} ln -sf {} ~/.cache/mutt_results/cur/ 2>/dev/null; mkdir -p ~/.cache/mutt_results/{cur,new,tmp}<enter><change-folder-readonly>~/.cache/mutt_results<enter>" "notmuch: inbox"
+macro index gs "<enter-command>unset wait_key<enter><shell-escape>notmuch search --output=files tag:sent | head -n 1000 | xargs -I {} ln -sf {} ~/.cache/mutt_results/cur/ 2>/dev/null; mkdir -p ~/.cache/mutt_results/{cur,new,tmp}<enter><change-folder-readonly>~/.cache/mutt_results<enter>" "notmuch: sent"
+macro index ga "<enter-command>unset wait_key<enter><shell-escape>notmuch search --output=files '*' | head -n 1000 | xargs -I {} ln -sf {} ~/.cache/mutt_results/cur/ 2>/dev/null; mkdir -p ~/.cache/mutt_results/{cur,new,tmp}<enter><change-folder-readonly>~/.cache/mutt_results<enter>" "notmuch: all mail"
+macro index gd "<enter-command>unset wait_key<enter><shell-escape>notmuch search --output=files tag:draft | head -n 1000 | xargs -I {} ln -sf {} ~/.cache/mutt_results/cur/ 2>/dev/null; mkdir -p ~/.cache/mutt_results/{cur,new,tmp}<enter><change-folder-readonly>~/.cache/mutt_results<enter>" "notmuch: drafts"
+
+# Draft and postponed message settings
+set postpone = yes
+set recall = ask-yes
+bind compose P postpone-message
+bind index R recall-message
+
+# Color quoted text in pager
+color quoted  green  default
+color quoted1 blue   default
+color quoted2 cyan   default
+
+# AI Reply Generation
+macro index,pager <F2> "<pipe-message>~/.mutt/auto_reply_wrapper.sh<enter>" "Generate AI reply"
+
+# Improve threading display
+set sort = threads
+set sort_aux = reverse-last-date-received
+set uncollapse_jump = yes
+set sort_re = yes
+set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
