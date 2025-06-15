@@ -1,16 +1,30 @@
-# AI Email Assistant for NeoMutt
+# Complete NeoMutt + AI Email Setup Archive
 
-An intelligent email assistant that generates contextual replies using AI models and semantic search through your email history.
+A comprehensive email management system combining NeoMutt configuration, AI-powered reply generation, and productivity utilities. This is a complete personal email setup archive including configuration files, scripts, and an intelligent assistant system.
 
 ## ✨ Features
 
-- **🤖 AI-powered replies** using Ollama (Gemma 3 27B & Mistral 7B)
-- **🔍 Semantic email search** with LanceDB for contextual awareness
-- **⚡ High-performance daemon** that keeps models loaded for instant responses
-- **🎯 Style matching** learns from your past emails to match your writing style
-- **📧 NeoMutt integration** with simple F2 key binding
-- **🚀 Auto-starting** daemon launches on first use
-- **💬 Introduction email handling** with specialized templates
+### 🤖 AI Email Assistant
+- **AI-powered replies** using Ollama (Gemma 3 27B & Mistral 7B)
+- **Semantic email search** with LanceDB for contextual awareness
+- **High-performance daemon** that keeps models loaded for instant responses
+- **Style matching** learns from your past emails to match your writing style
+- **Introduction email handling** with specialized templates
+
+### 📧 Complete NeoMutt Configuration
+- **Multiple color themes** (Gruvbox, Zenburn, Solar, Base16, Orange, Capucin)
+- **HTML email handling** with multiple viewer options
+- **Notmuch integration** for powerful email search
+- **URL extraction** and interactive selection
+- **Offline email queuing** with msmtp
+- **Gmail-style shortcuts** for navigation
+
+### 🔧 Productivity Utilities
+- **Interactive URL selection** from emails
+- **HTML processing** and viewing scripts
+- **Mail queue management** for offline scenarios
+- **Email search** with notmuch integration
+- **Automatic mail checking** and processing
 
 ## 🏗️ Architecture
 
@@ -19,12 +33,19 @@ An intelligent email assistant that generates contextual replies using AI models
 │    NeoMutt      │    │  auto_reply_     │    │  lancedb_       │
 │   (F2 key)     │───▶│  single.py       │───▶│  daemon.py      │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
-                                │                        │
-                                ▼                        ▼
-                       ┌──────────────────┐    ┌─────────────────┐
-                       │   Ollama LLM     │    │   LanceDB +     │
-                       │ (Gemma 3 27B)    │    │ SentenceXFormer │
-                       └──────────────────┘    └─────────────────┘
+        │                       │                        │
+        ▼                       ▼                        ▼
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│  Notmuch Search │    │   Ollama LLM     │    │   LanceDB +     │
+│  URL Selection  │    │ (Gemma 3 27B)    │    │ SentenceXFormer │
+│  HTML Processing│    │                  │    │                 │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+        │                       │
+        ▼                       ▼
+┌─────────────────┐    ┌──────────────────┐
+│  msmtp Queue    │    │  Style Analysis  │
+│  Mail Handling  │    │  Context Search  │
+└─────────────────┘    └──────────────────┘
 ```
 
 ## 🚀 Quick Start
@@ -34,15 +55,15 @@ An intelligent email assistant that generates contextual replies using AI models
 - **NeoMutt** email client
 - **Ollama** with models: `gemma3:27b` and `mistral:7b-instruct`
 - **notmuch** for email indexing
-- **Python 3.8+**
-- **uv** package manager
+- **msmtp** for email sending
+- **Python 3.8+** with **uv** package manager
 
 ### Installation
 
 1. **Clone this repository:**
    ```bash
-   git clone <your-repo-url>
-   cd <repo-name>
+   git clone https://github.com/ttunguz/ai-email-assistant.git
+   cd ai-email-assistant
    ```
 
 2. **Set up Python environment:**
@@ -51,141 +72,158 @@ An intelligent email assistant that generates contextual replies using AI models
    uv pip install -r requirements.txt
    ```
 
-3. **Download Ollama models:**
+3. **Configure NeoMutt:**
+   ```bash
+   # Copy or symlink the main configuration
+   cp .muttrc ~/.muttrc
+   
+   # Or use specific components
+   source ~/.mutt/gruvbox.muttrc  # in your .muttrc for theme
+   ```
+
+4. **Download Ollama models:**
    ```bash
    ollama pull gemma3:27b
    ollama pull mistral:7b-instruct
    ```
 
-4. **Index your emails:**
+5. **Index your emails:**
    ```bash
    python3 build_lancedb_index.py
    ```
 
-5. **Add to your `.muttrc`:**
-   ```
-   # AI Reply Generation
-   macro index,pager <F2> "<pipe-message>~/.mutt/auto_reply_wrapper.sh<enter>" "Generate AI reply"
-   ```
-
 ## 📖 Usage
 
-### Basic Email Replies
+### AI Email Replies
+- **F2** - Generate AI reply with context from email history
+- **Ctrl+B** - Extract URLs from current message
+- **O** - Interactive URL selection modal
 
-1. Open an email in NeoMutt
-2. Press **F2**
-3. Wait for AI-generated reply (auto-starts daemon on first use)
-4. Copy the reply text into your compose window
+### Email Navigation (Gmail-style)
+- **Ctrl+E, N** - Notmuch search
+- **Ctrl+E, T** - Reconstruct email thread
+- **gi** - Go to inbox
+- **gs** - Go to sent mail
+- **ga** - View all mail
+- **gd** - Go to drafts
 
-### With Custom Guidance
+### HTML Email Handling
+- **H** or **V** - Open HTML in browser
+- **B** - View HTML in Safari
+- **T** - View as formatted text
+- **L** - View with lynx
+- **W** - View with w3m
 
-```bash
-echo "Draft email content" | python3 auto_reply_single.py --guidance "Make this more casual"
-```
+## 📁 Configuration Files
 
-### Introduction Emails
-
-The system automatically detects introduction emails and uses specialized templates:
-
-```bash
-python3 auto_reply_single.py --intro  # Force intro mode
-python3 auto_reply_single.py --auto-detect  # Auto-detect intros
-```
-
-## 🔧 Advanced Usage
-
-### Daemon Management
-
-```bash
-# Check daemon status
-./daemon_control.sh status
-
-# Start daemon manually
-./daemon_control.sh start
-
-# Stop daemon
-./daemon_control.sh stop
-
-# View logs
-./daemon_control.sh log
-```
-
-### Rebuilding Email Index
-
-```bash
-python3 build_lancedb_index.py
-```
-
-## 📁 Key Files
-
+### Core Configuration
 | File | Description |
 |------|-------------|
-| `auto_reply_single.py` | Main script for generating AI replies |
-| `lancedb_daemon.py` | Background daemon for fast semantic search |
-| `build_lancedb_index.py` | Builds searchable email index |
+| `.muttrc` | Main NeoMutt configuration with all bindings |
+| `mailcap` | File type associations for email attachments |
+| `mailboxes` | Mailbox definitions and folders |
+
+### Color Themes
+| File | Description |
+|------|-------------|
+| `gruvbox.muttrc` | Gruvbox color theme |
+| `zenburn.muttrc` | Zenburn color theme |
+| `solar-dark.muttrc` | Solarized Dark theme |
+| `base16.muttrc` | Base16 color scheme |
+| `orange.muttrc` | Orange color theme |
+| `capucin.muttrc` | Capucin color theme |
+
+### AI Assistant Scripts
+| File | Description |
+|------|-------------|
+| `auto_reply_single.py` | Main AI reply generation script |
+| `lancedb_daemon.py` | Background daemon for semantic search |
+| `build_lancedb_index.py` | Email indexing system |
 | `daemon_control.sh` | Daemon management script |
-| `auto_reply_wrapper.sh` | Wrapper for NeoMutt integration |
+| `auto_reply_wrapper.sh` | NeoMutt integration wrapper |
+
+### Utility Scripts
+| File | Description |
+|------|-------------|
+| `notmuch_py.py` | Python notmuch search interface |
+| `notmuch.sh` | Shell notmuch integration |
+| `select_url_modal.py` | Interactive URL selection |
+| `extract_urls.sh` | Extract URLs from emails |
+| `process_html.sh` | HTML email processing |
+| `view_html.sh` | HTML viewing utilities |
+
+### Mail Queue Management
+| File | Description |
+|------|-------------|
+| `msmtp-enqueue.sh` | Queue emails for offline sending |
+| `msmtp-runqueue.sh` | Process queued emails |
+| `msmtpq-listqueue.sh` | List queued messages |
+| `check_mail.sh` | Automated mail checking |
 
 ## ⚙️ Configuration
 
-### Email Indexing
+### Email Setup
+- Configure your email accounts in separate config files
+- Set up notmuch for email indexing
+- Configure msmtp for email sending
 
-Edit `build_lancedb_index.py` to customize:
-- `notmuch_query`: Which emails to index
-- `EMBEDDING_MODEL_NAME`: Embedding model for semantic search
+### AI Assistant
+- **Writing Style**: Automatically learns from your email history
+- **Context Search**: Customize search parameters in `build_lancedb_index.py`
+- **Models**: Switch between different Ollama models as needed
 
-### Writing Style
-
-The AI learns from your email history automatically. To customize the style prompts, edit the prompts in `auto_reply_single.py`.
-
-### Performance Tuning
-
-- **Daemon auto-start**: Configured by default
-- **Cache size**: Adjust `MAX_HISTORY_WORDS` in config
-- **Search results**: Modify `limit` parameter in LanceDB queries
+### Themes
+Choose your preferred theme by sourcing it in your `.muttrc`:
+```bash
+source ~/.mutt/gruvbox.muttrc     # Dark theme
+source ~/.mutt/solar-dark.muttrc  # Solarized
+source ~/.mutt/zenburn.muttrc     # Easy on eyes
+```
 
 ## 🔍 How It Works
 
-1. **Email Indexing**: `build_lancedb_index.py` processes your notmuch database and creates vector embeddings of all emails using SentenceTransformers
-2. **Semantic Search**: When you press F2, the current email is embedded and matched against your email history to find contextually similar conversations
-3. **AI Generation**: Ollama generates a reply using the found context and learned writing style
-4. **Performance**: The daemon keeps models loaded in memory for instant subsequent requests
+1. **Email Management**: NeoMutt handles all email operations with custom key bindings
+2. **Search Integration**: Notmuch provides fast, full-text email search
+3. **AI Context**: LanceDB creates semantic embeddings of your email history
+4. **Reply Generation**: Ollama generates contextually aware replies
+5. **Offline Support**: msmtp queues emails when offline
+6. **URL Handling**: Scripts extract and manage URLs from emails
 
 ## 🐛 Troubleshooting
 
-### Daemon won't start
+### AI Assistant Issues
 ```bash
-./daemon_control.sh log  # Check logs
-./daemon_control.sh restart  # Force restart
-```
-
-### No email context found
-```bash
+./daemon_control.sh status    # Check daemon
+./daemon_control.sh restart   # Restart daemon
 python3 build_lancedb_index.py  # Rebuild index
-notmuch new  # Update email database
 ```
 
-### Models not found
+### Email Configuration
 ```bash
-ollama list  # Check installed models
-ollama pull gemma3:27b  # Install missing models
+notmuch new              # Update email database
+msmtp --serverinfo       # Test SMTP configuration
 ```
 
-## 🤝 Contributing
+### Theme Issues
+```bash
+# Test colors in terminal
+echo $TERM
+# Ensure 256 color support
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+## 📄 Archive Notes
 
-## 📄 License
-
-[Add your preferred license]
+This is a complete personal email setup archive including:
+- ✅ All configuration files and themes
+- ✅ Custom scripts and utilities  
+- ✅ AI assistant system
+- ✅ Queue management tools
+- ✅ Search and navigation helpers
 
 ## 🙏 Acknowledgments
 
-- Built with [Ollama](https://ollama.ai/) for local LLM inference
+- Built with [NeoMutt](https://neomutt.org/) email client
+- [Ollama](https://ollama.ai/) for local LLM inference
 - [LanceDB](https://lancedb.github.io/lancedb/) for vector similarity search
-- [SentenceTransformers](https://www.sbert.net/) for email embeddings
-- [NeoMutt](https://neomutt.org/) email client integration
+- [Notmuch](https://notmuchmail.org/) for email search
+- [msmtp](https://marlam.de/msmtp/) for email sending
