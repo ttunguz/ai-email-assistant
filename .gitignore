@@ -1,0 +1,55 @@
+# Claude AI settings
+**/.claude/settings.local.json
+
+# Email configuration files with credentials
+.msmtprc
+msmtprc
+oauth2.py
+aliases.txt
+**/gmail
+**/redpoint
+**/theory
+**/tomtunguz
+*_signature
+aliases.sh
+
+# Personal email data and cache
+INBOX/
+cache/
+drafts
+email.tmp
+*.queue.log
+*.log
+select_url_modal.log
+lmdb
+lancedb_daemon.pid
+
+# Virtual environments
+.venv/
+venv/
+__pycache__/
+
+# Database files
+lancedb/
+*.lance
+
+# Mail directories and personal data
+mail/
+~/
+tt/
+[Gmail].Drafts
+
+# Temporary and queue files
+msmstpqueue
+*.queue
+test_*.txt
+writing_samples.txt
+writing_style_analysis.txt
+
+# OS files
+.DS_Store
+*.swp
+*.swo
+
+# Logs
+*.log

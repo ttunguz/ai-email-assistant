@@ -1,0 +1,13 @@
+# Sample NeoMutt configuration for AI Email Assistant
+# Add these lines to your existing .muttrc file
+
+# AI Reply Generation
+macro index,pager <F2> "<pipe-message>~/.mutt/auto_reply_wrapper.sh<enter>" "Generate AI reply"
+
+# Optional: Additional key bindings for AI functionality
+# macro compose <F3> "<pipe-message>~/.mutt/auto_reply_single.py --guidance 'Make this more casual'<enter>" "Make reply casual"
+# macro compose <F4> "<pipe-message>~/.mutt/auto_reply_single.py --intro<enter>" "Generate intro email"
+
+# Other useful settings for email processing
+set wait_key = no          # Don't wait for key press after external commands
+set pipe_decode = yes      # Decode messages before piping to external commands 
