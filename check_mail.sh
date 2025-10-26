@@ -21,6 +21,23 @@
     #~/.mutt/msmtp
     /opt/homebrew/bin/mbsync -a
     /opt/homebrew/bin/notmuch new
+    
+    # Apply tagging rules first (before inbox tag to avoid conflicts)
+    /opt/homebrew/bin/notmuch tag +newsletter -- folder:theory/INBOX AND '(' from:newsletters OR from:substack OR from:mailchimp OR subject:newsletter OR subject:unsubscribe ')'
+    /opt/homebrew/bin/notmuch tag +automated -- folder:theory/INBOX AND '(' from:noreply OR from:no-reply OR from:donotreply OR from:notifications ')'
+    /opt/homebrew/bin/notmuch tag +receipts -- folder:theory/INBOX AND '(' from:receipts OR subject:receipt OR subject:invoice OR from:uber OR from:lyft ')'
+    /opt/homebrew/bin/notmuch tag +asana -- folder:theory/INBOX AND '(' from:asana OR subject:asana OR from:notifications@asana.com ')'
+    /opt/homebrew/bin/notmuch tag +calendar -- folder:theory/INBOX AND '(' from:calendar OR subject:invitation OR subject:meeting ')'
+    /opt/homebrew/bin/notmuch tag +github -- folder:theory/INBOX AND '(' from:github OR from:notifications@github ')'
+    /opt/homebrew/bin/notmuch tag +notion -- folder:theory/INBOX AND '(' from:notion OR subject:notion ')'
+    /opt/homebrew/bin/notmuch tag +theory -- folder:theory/INBOX AND '(' to:theory.ventures OR from:theory.ventures ')'
+    /opt/homebrew/bin/notmuch tag +important -- folder:theory/INBOX AND '(' from:john OR from:lauren OR from:art OR from:spencer OR from:kristin ')'
+    /opt/homebrew/bin/notmuch tag +portfolio -- folder:theory/INBOX AND '(' subject:portfolio OR subject:investment OR subject:fundraising ')'
+    /opt/homebrew/bin/notmuch tag +personal -- folder:theory/INBOX AND '(' to:tomasz.tunguz@gmail.com OR from:family OR from:friends ')'
+
+    # Tag emails in INBOX folder (only those not auto-archived)
+    /opt/homebrew/bin/notmuch tag +inbox -- folder:theory/INBOX AND NOT '(' tag:automated OR tag:receipts OR tag:asana ')'
+    
     /opt/homebrew/bin/notmuch compact
 
 #rm ~/.mbsyncrc
