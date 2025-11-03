@@ -23,8 +23,8 @@
     /opt/homebrew/bin/notmuch new
     
     # Apply tagging rules first (before inbox tag to avoid conflicts)
-    /opt/homebrew/bin/notmuch tag +newsletter -- folder:theory/INBOX AND '(' from:newsletters OR from:substack OR from:mailchimp OR subject:newsletter OR subject:unsubscribe ')'
-    /opt/homebrew/bin/notmuch tag +automated -- folder:theory/INBOX AND '(' from:noreply OR from:no-reply OR from:donotreply OR from:notifications ')'
+    /opt/homebrew/bin/notmuch tag +newsletter -- folder:theory/INBOX AND '(' from:newsletters OR from:substack OR from:mailchimp OR subject:newsletter OR subject:unsubscribe OR from:bloomberg.com OR from:news.bloomberg.com OR from:techcrunch.com OR from:pitchbook.com OR from:coinbase.com OR from:fortune.com OR from:theinformation.com OR from:hex.tech OR from:calypsoai.com OR from:ycombinator.com OR from:pointer.io OR from:nekuda.org OR from:dowjones.com OR from:getbreakout.ai OR from:harmonic.ai OR from:braintrustdata.com OR from:venture5.com OR from:email.insider.com OR from:theneurondaily.com ')'
+    /opt/homebrew/bin/notmuch tag +automated -- folder:theory/INBOX AND NOT tag:newsletter AND '(' from:noreply OR from:no-reply OR from:donotreply OR from:notifications ')'
     /opt/homebrew/bin/notmuch tag +receipts -- folder:theory/INBOX AND '(' from:receipts OR subject:receipt OR subject:invoice OR from:uber OR from:lyft ')'
     /opt/homebrew/bin/notmuch tag +asana -- folder:theory/INBOX AND '(' from:asana OR subject:asana OR from:notifications@asana.com ')'
     /opt/homebrew/bin/notmuch tag +calendar -- folder:theory/INBOX AND '(' from:calendar OR subject:invitation OR subject:meeting ')'
